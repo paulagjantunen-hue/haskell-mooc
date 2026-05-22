@@ -54,9 +54,8 @@ split s =
 
 -- checkNumber should take a pair of two strings and return them
 -- unchanged if they don't contain numbers. Otherwise Nothing is
--- returned.
 checkNumber :: (String, String) -> Maybe (String, String)
-checkNumber = (a,b)
+checkNumber (a,b)
   | any isDigit a || any isDigit b = Nothing
   | otherwise = Just (a,b)
 
@@ -199,9 +198,9 @@ balance accountName = BankOp $ \bank@(Bank accounts) ->
 --     ==> ((),Bank (fromList [("cedric",7),("ginny",1),("harry",10)]))
 
 rob :: String -> String -> BankOp ()
-rob from to = do
-  amount <- balance from
-  withdrawOp from amount
+rob from to =
+  balance from +> \amount ->
+  withdrawOp from amount +>>
   depositOp to amount
 
 ------------------------------------------------------------------------------
